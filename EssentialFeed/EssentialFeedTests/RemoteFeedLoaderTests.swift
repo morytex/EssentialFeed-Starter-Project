@@ -8,14 +8,6 @@
 import XCTest
 import EssentialFeed
 
-final class HTTPClientSpy: HTTPCLient {
-    var requestedURLs = [URL]()
-
-    func get(from url: URL) {
-        requestedURLs.append(url)
-    }
-}
-
 final class RemoteFeedLoaderTests: XCTestCase {
 
     func test_init_shouldNotRequestDataFromURL() {
@@ -43,6 +35,19 @@ final class RemoteFeedLoaderTests: XCTestCase {
         XCTAssertEqual(client.requestedURLs, [url, url])
     }
 
+    func test_load_whenClientError_shouldReturnConnectivityError() {
+        let url = URL(string: "https://example.com")!
+        let (sut, client) = makeSUT(url: url)
+
+        var capturedErrors = [RemoteFeedLoader.Error]()
+        sut.load { capturedErrors.append($0) }
+        let clientError = NSError(domain: "Test", code: 0)
+        client.complete(with: clientError)
+
+        XCTAssertEqual(client.requestedURLs, [url])
+        XCTAssertEqual(capturedErrors, [.connectivity])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(url: URL = URL(string: "https://example.com")!) -> (RemoteFeedLoader, HTTPClientSpy) {
@@ -50,5 +55,19 @@ final class RemoteFeedLoaderTests: XCTestCase {
         let sut = RemoteFeedLoader(client: client, url: url)
 
         return (sut, client)
+    }
+}
+
+final class HTTPClientSpy: HTTPCLient {
+    var completions = [(Error) -> Void]()
+    var requestedURLs = [URL]()
+
+    func get(from url: URL, completion: @escaping (Error) -> Void) {
+        completions.append(completion)
+        requestedURLs.append(url)
+    }
+
+    func complete(with error: Error) {
+        completions.removeFirst()(error)
     }
 }
