@@ -8,7 +8,7 @@
 import Foundation
 
 public final class RemoteFeedLoader: FeedLoader {
-    private let client: HTTPCLient
+    private let client: HTTPClient
     private let url: URL
 
     public enum Error: Swift.Error {
@@ -18,7 +18,7 @@ public final class RemoteFeedLoader: FeedLoader {
 
     public typealias Result = LoadFeedResult
 
-    public init (client: HTTPCLient, url: URL) {
+    public init (client: HTTPClient, url: URL) {
         self.client = client
         self.url = url
     }
