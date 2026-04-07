@@ -18,14 +18,18 @@ final class URLSessionHTTPClient: HTTPCLient {
     }
 
     func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
-        session.dataTask(with: url) { _, _, error in
+        session.dataTask(with: url) { data, response, error in
             if let error {
                 completion(.failure(error))
                 return
-            } else {
-                completion(.failure(UnexpectedValueRepresentation()))
+            }
+
+            if let data, data.count > 0, let response = response as? HTTPURLResponse {
+                completion(.success(data, response))
                 return
             }
+
+            completion(.failure(UnexpectedValueRepresentation()))
         }.resume()
     }
 }
@@ -77,12 +81,32 @@ final class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: nonHTTPURLResponse(), error: nil))
     }
 
+    func test_getFromURL_whenHTTPURLResponseAndData_shouldSucceed() {
+        let data = anyData()
+        let response = anyHTTPURLResponse()
+        URLProtocolStub.stub(anyURL(), data: data, response: response, error: nil)
+
+        let expectation = expectation(description: "Wait for completion")
+        makeSUT().get(from: anyURL(), completion: { result in
+            switch result {
+            case let .success(receivedData, receivedResponse):
+                XCTAssertEqual(receivedData, data)
+                XCTAssertEqual(receivedResponse.statusCode, response.statusCode)
+                XCTAssertEqual(receivedResponse.url, response.url)
+            default:
+                XCTFail("Expected to succeed, but got \(result)")
+            }
+            expectation.fulfill()
+        })
+        wait(for: [expectation], timeout: 1.0)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> URLSessionHTTPClient {
         let sut = URLSessionHTTPClient()
 
-        trackForMemoryLeaks(on: sut)
+        trackForMemoryLeaks(on: sut, file: file, line: line)
 
         return sut
     }
