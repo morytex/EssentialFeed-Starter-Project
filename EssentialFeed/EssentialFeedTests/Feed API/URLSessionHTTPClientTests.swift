@@ -24,7 +24,7 @@ final class URLSessionHTTPClient: HTTPCLient {
                 return
             }
 
-            if let data, data.count > 0, let response = response as? HTTPURLResponse {
+            if let data, let response = response as? HTTPURLResponse {
                 completion(.success(data, response))
                 return
             }
@@ -71,7 +71,6 @@ final class URLSessionHTTPClientTests: XCTestCase {
     func test_getFromURL_whenInvalidRepresentationCases_shouldFail() {
         XCTAssertNotNil(resultErrorFor(data: nil, response: nil, error: nil))
         XCTAssertNotNil(resultErrorFor(data: nil, response: nonHTTPURLResponse(), error: nil))
-        XCTAssertNotNil(resultErrorFor(data: nil, response: anyHTTPURLResponse(), error: nil))
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: nil, error: nil))
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: nil, error: anyNSError()))
         XCTAssertNotNil(resultErrorFor(data: nil, response: nonHTTPURLResponse(), error: anyNSError()))
@@ -81,7 +80,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: nonHTTPURLResponse(), error: nil))
     }
 
-    func test_getFromURL_whenHTTPURLResponseAndData_shouldSucceed() {
+    func test_getFromURL_whenHTTPURLResponse_withAnyData_shouldSucceed() {
         let data = anyData()
         let response = anyHTTPURLResponse()
         URLProtocolStub.stub(anyURL(), data: data, response: response, error: nil)
@@ -91,6 +90,26 @@ final class URLSessionHTTPClientTests: XCTestCase {
             switch result {
             case let .success(receivedData, receivedResponse):
                 XCTAssertEqual(receivedData, data)
+                XCTAssertEqual(receivedResponse.statusCode, response.statusCode)
+                XCTAssertEqual(receivedResponse.url, response.url)
+            default:
+                XCTFail("Expected to succeed, but got \(result)")
+            }
+            expectation.fulfill()
+        })
+        wait(for: [expectation], timeout: 1.0)
+    }
+
+    func test_getFromURL_whenHTTPURLResponse_withNilData_shouldSucceedWithEmptyData() {
+        let response = anyHTTPURLResponse()
+        URLProtocolStub.stub(anyURL(), data: nil, response: response, error: nil)
+
+        let expectation = expectation(description: "Wait for completion")
+        makeSUT().get(from: anyURL(), completion: { result in
+            let emptyData = Data()
+            switch result {
+            case let .success(receivedData, receivedResponse):
+                XCTAssertEqual(receivedData, emptyData)
                 XCTAssertEqual(receivedResponse.statusCode, response.statusCode)
                 XCTAssertEqual(receivedResponse.url, response.url)
             default:
