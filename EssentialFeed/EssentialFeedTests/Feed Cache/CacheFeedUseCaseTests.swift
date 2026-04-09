@@ -16,19 +16,38 @@ final class LocalFeedLoader {
     }
 
     func save(_ items: [FeedItem]) {
-        store.deleteCachedFeed()
+        store.deleteCachedFeed { [unowned self] error in
+            if error == nil {
+                self.store.insert(items)
+            }
+        }
     }
 }
 
 final class FeedStore {
-    var deleteFeedCallCount: Int = 0
-    var insertFeedCallCount: Int = 0
+    typealias DeleteCompletion = (Error?) -> Void
 
-    func deleteCachedFeed() {
-        deleteFeedCallCount += 1
+    var deleteCachedFeedCallCount: Int = 0
+    var insertCallCount: Int = 0
+
+    var deleteCompletions = [DeleteCompletion]()
+
+    func deleteCachedFeed(completion: @escaping DeleteCompletion) {
+        deleteCachedFeedCallCount += 1
+        deleteCompletions.append(completion)
     }
 
-    func completeCacheDeletion(with error: NSError, at index: Int = 0) { }
+    func insert(_ items: [FeedItem]) {
+        insertCallCount += 1
+    }
+
+    func completeDeletion(with error: NSError, at index: Int = 0) {
+        deleteCompletions[index](error)
+    }
+
+    func completeDeletionWithSuccess(at index: Int = 0) {
+        deleteCompletions[index](nil)
+    }
 }
 
 final class CacheFeedUseCaseTests: XCTestCase {
@@ -36,7 +55,7 @@ final class CacheFeedUseCaseTests: XCTestCase {
     func test_init_shouldNotDeleteCacheUponCreation() {
         let (_, store) = makeSUT()
 
-        XCTAssertEqual(store.deleteFeedCallCount, 0)
+        XCTAssertEqual(store.deleteCachedFeedCallCount, 0)
     }
 
     func test_save_shouldRequestCacheDeletion() {
@@ -45,7 +64,7 @@ final class CacheFeedUseCaseTests: XCTestCase {
 
         sut.save(items)
 
-        XCTAssertEqual(store.deleteFeedCallCount, 1)
+        XCTAssertEqual(store.deleteCachedFeedCallCount, 1)
     }
 
     func test_save_withCacheDeletionError_shouldNotRequestCacheInsertion() {
@@ -53,9 +72,19 @@ final class CacheFeedUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
 
         sut.save(items)
-        store.completeCacheDeletion(with: anyNSError())
+        store.completeDeletion(with: anyNSError())
 
-        XCTAssertEqual(store.insertFeedCallCount, 0)
+        XCTAssertEqual(store.insertCallCount, 0)
+    }
+
+    func test_save_withCacheDeletionSuccess_shouldRequestNewCacheInsertion() {
+        let items = [uniqueItem()]
+        let (sut, store) = makeSUT()
+
+        sut.save(items)
+        store.completeDeletionWithSuccess()
+
+        XCTAssertEqual(store.insertCallCount, 1)
     }
 
     // MARK: - Helpers
