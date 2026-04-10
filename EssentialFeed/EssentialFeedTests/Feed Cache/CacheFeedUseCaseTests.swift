@@ -17,8 +17,9 @@ final class LocalFeedLoader {
         self.currentDate = currentDate
     }
 
-    func save(_ items: [FeedItem]) {
+    func save(_ items: [FeedItem], completion: @escaping (Error?) -> Void) {
         store.deleteCachedFeed { [unowned self] error in
+            completion(error)
             if error == nil {
                 self.store.insert(items, timestamp: self.currentDate())
             }
@@ -68,7 +69,7 @@ final class CacheFeedUseCaseTests: XCTestCase {
         let items = [uniqueItem()]
         let (sut, store) = makeSUT()
 
-        sut.save(items)
+        sut.save(items) { _ in }
 
         XCTAssertEqual(store.receivedMessages, [.deletion])
     }
@@ -77,7 +78,7 @@ final class CacheFeedUseCaseTests: XCTestCase {
         let items = [uniqueItem()]
         let (sut, store) = makeSUT()
 
-        sut.save(items)
+        sut.save(items) { _ in }
         store.completeDeletion(with: anyNSError())
 
         XCTAssertEqual(store.receivedMessages, [.deletion])
@@ -88,10 +89,28 @@ final class CacheFeedUseCaseTests: XCTestCase {
         let items = [uniqueItem()]
         let (sut, store) = makeSUT(currentDate: { timestamp })
 
-        sut.save(items)
+        sut.save(items) { _ in }
         store.completeDeletionWithSuccess()
 
         XCTAssertEqual(store.receivedMessages, [.deletion, .insert(items: items, timestamp: timestamp)])
+    }
+
+    func test_save_withCacheDeletionError_shouldDeliverError() {
+        let timestamp = Date()
+        let items = [uniqueItem()]
+        let (sut, store) = makeSUT(currentDate: { timestamp })
+        let deletionError = anyNSError()
+        let expectation = expectation(description: "Wait for completion")
+
+        var receivedError: Error?
+        sut.save(items) { error in
+            receivedError = error
+            expectation.fulfill( )
+        }
+        store.completeDeletion(with: deletionError)
+        wait(for: [expectation], timeout: 1)
+
+        XCTAssertEqual(receivedError as? NSError, deletionError)
     }
 
     // MARK: - Helpers
