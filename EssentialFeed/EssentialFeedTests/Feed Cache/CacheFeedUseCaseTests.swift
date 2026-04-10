@@ -77,19 +77,17 @@ final class CacheFeedUseCaseTests: XCTestCase {
     }
 
     func test_save_shouldRequestCacheDeletion() {
-        let items = [uniqueItem()]
         let (sut, store) = makeSUT()
 
-        sut.save(items) { _ in }
+        sut.save([uniqueItem()]) { _ in }
 
         XCTAssertEqual(store.receivedMessages, [.deletion])
     }
 
     func test_save_withCacheDeletionError_shouldNotRequestCacheInsertion() {
-        let items = [uniqueItem()]
         let (sut, store) = makeSUT()
 
-        sut.save(items) { _ in }
+        sut.save([uniqueItem()]) { _ in }
         store.completeDeletion(with: anyNSError())
 
         XCTAssertEqual(store.receivedMessages, [.deletion])
@@ -107,14 +105,12 @@ final class CacheFeedUseCaseTests: XCTestCase {
     }
 
     func test_save_withCacheDeletionError_shouldDeliverError() {
-        let timestamp = Date()
-        let items = [uniqueItem()]
-        let (sut, store) = makeSUT(currentDate: { timestamp })
+        let (sut, store) = makeSUT()
         let deletionError = anyNSError()
         let expectation = expectation(description: "Wait for completion")
 
         var receivedError: Error?
-        sut.save(items) { error in
+        sut.save([uniqueItem()]) { error in
             receivedError = error
             expectation.fulfill( )
         }
@@ -125,14 +121,12 @@ final class CacheFeedUseCaseTests: XCTestCase {
     }
 
     func test_save_withCacheInsertError_shouldDeliverError() {
-        let timestamp = Date()
-        let items = [uniqueItem()]
-        let (sut, store) = makeSUT(currentDate: { timestamp })
+        let (sut, store) = makeSUT()
         let insertionError = anyNSError()
         let expectation = expectation(description: "Wait for completion")
 
         var receivedError: Error?
-        sut.save(items) { error in
+        sut.save([uniqueItem()]) { error in
             receivedError = error
             expectation.fulfill( )
         }
@@ -144,13 +138,11 @@ final class CacheFeedUseCaseTests: XCTestCase {
     }
 
     func test_save_withCacheInsertionSuccess_shouldNotDeliverError() {
-        let timestamp = Date()
-        let items = [uniqueItem()]
-        let (sut, store) = makeSUT(currentDate: { timestamp })
+        let (sut, store) = makeSUT()
         let expectation = expectation(description: "Wait for completion")
 
         var receivedError: Error?
-        sut.save(items) { error in
+        sut.save([uniqueItem()]) { error in
             receivedError = error
             expectation.fulfill( )
         }
