@@ -21,9 +21,7 @@ final class LocalFeedLoader {
         store.deleteCachedFeed { [unowned self] deletionError in
             guard deletionError == nil else { return completion(deletionError) }
 
-            self.store.insert(items, timestamp: self.currentDate()) { insertionError in
-                completion(insertionError)
-            }
+            self.store.insert(items, timestamp: self.currentDate(), completion: completion)
         }
     }
 }
