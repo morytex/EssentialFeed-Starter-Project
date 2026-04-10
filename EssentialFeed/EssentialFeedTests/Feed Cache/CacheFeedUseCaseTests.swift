@@ -105,34 +105,20 @@ final class CacheFeedUseCaseTests: XCTestCase {
     func test_save_withCacheDeletionError_shouldDeliverError() {
         let (sut, store) = makeSUT()
         let deletionError = anyNSError()
-        let expectation = expectation(description: "Wait for completion")
 
-        var receivedError: Error?
-        sut.save([uniqueItem()]) { error in
-            receivedError = error
-            expectation.fulfill( )
+        expect(sut, toCompleteWith: deletionError) {
+            store.completeDeletion(with: deletionError)
         }
-        store.completeDeletion(with: deletionError)
-        wait(for: [expectation], timeout: 1)
-
-        XCTAssertEqual(receivedError as? NSError, deletionError)
     }
 
     func test_save_withCacheInsertError_shouldDeliverError() {
         let (sut, store) = makeSUT()
         let insertionError = anyNSError()
-        let expectation = expectation(description: "Wait for completion")
 
-        var receivedError: Error?
-        sut.save([uniqueItem()]) { error in
-            receivedError = error
-            expectation.fulfill( )
+        expect(sut, toCompleteWith: insertionError) {
+            store.completeDeletionWithSuccess()
+            store.completeInsertion(with: insertionError)
         }
-        store.completeDeletionWithSuccess()
-        store.completeInsertion(with: insertionError)
-        wait(for: [expectation], timeout: 1)
-
-        XCTAssertEqual(receivedError as? NSError, insertionError)
     }
 
     func test_save_withCacheInsertionSuccess_shouldNotDeliverError() {
@@ -161,6 +147,20 @@ final class CacheFeedUseCaseTests: XCTestCase {
         trackForMemoryLeaks(on: sut, file: file, line: line)
 
         return (sut, store)
+    }
+
+    private func expect(_ sut: LocalFeedLoader, toCompleteWith error: NSError, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+        let expectation = expectation(description: "Wait for completion")
+        var receivedError: Error?
+        sut.save([uniqueItem()]) { error in
+            receivedError = error
+            expectation.fulfill( )
+        }
+
+        action()
+        wait(for: [expectation], timeout: 1)
+
+        XCTAssertEqual(receivedError as? NSError, error)
     }
 
     private func uniqueItem() -> FeedItem {
