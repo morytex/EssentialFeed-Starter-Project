@@ -34,7 +34,6 @@ final class FeedStore {
 
     typealias DeleteCompletion = (Error?) -> Void
 
-    var insertedItems = [(items: [FeedItem], timestamp: Date)]()
     var receivedMessages = [Messages]()
 
     var deleteCompletions = [DeleteCompletion]()
@@ -46,7 +45,6 @@ final class FeedStore {
 
     func insert(_ items: [FeedItem], timestamp: Date) {
         receivedMessages.append(.insert(items: items, timestamp: timestamp))
-        insertedItems.append((items, timestamp))
     }
 
     func completeDeletion(with error: NSError, at index: Int = 0) {
