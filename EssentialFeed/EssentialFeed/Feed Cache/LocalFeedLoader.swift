@@ -30,14 +30,14 @@ public final class LocalFeedLoader {
     }
 
     public func load(completion: @escaping (LoadResult) -> Void) {
-        store.retrieveCachedFeed { result in
+        store.retrieveCachedFeed { [unowned self] result in
             switch result {
-            case let .success(localFeed, _):
+            case let .success(localFeed, timestamp) where self.hasValid(timestamp):
                 completion(.success(localFeed.toModels()))
-            case .empty:
-                completion(.success([]))
             case let .failure(error):
                 completion(.failure(error))
+            default:
+                completion(.success([]))
             }
         }
     }
@@ -47,6 +47,14 @@ public final class LocalFeedLoader {
             guard self != nil else { return }
             completion(error)
         }
+    }
+
+    private func hasValid(_ timestamp: Date) -> Bool {
+        guard let expirationDate = Calendar(identifier: .gregorian).date(byAdding: .day, value: 7, to: timestamp) else {
+            return false
+        }
+
+        return currentDate() < expirationDate
     }
 }
 
