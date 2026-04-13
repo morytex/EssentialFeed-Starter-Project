@@ -43,6 +43,23 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
+    func test_load_withEmptyCache_shouldCompleteWithEmptyFeed() {
+        let (sut, store) = makeSUT()
+
+        let expectation = expectation(description: "Wait for completion")
+        sut.load { result in
+            switch result {
+            case let .success(feed):
+                XCTAssertTrue(feed.isEmpty)
+            default:
+                XCTFail("Expected success, got failure")
+            }
+            expectation.fulfill()
+        }
+        store.completeRetrievalWithEmptyCache()
+
+        wait(for: [expectation], timeout: 1.0)
+    }
 
     // MARK: - Helpers
 

@@ -32,6 +32,7 @@ public final class LocalFeedLoader {
     public func load(completion: @escaping (LoadResult) -> Void) {
         store.retrieveCachedFeed { error in
             if let error { return completion(.failure(error)) }
+            completion(.success([]))
         }
     }
 
