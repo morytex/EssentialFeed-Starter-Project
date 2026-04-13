@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		080EDEFB21B6DA7E00813479 /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 080EDEF121B6DA7E00813479 /* EssentialFeed.framework */; };
 		B462861B2F86889D00E60C50 /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 080EDEF121B6DA7E00813479 /* EssentialFeed.framework */; };
-		B46286212F86938E00E60C50 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E1E2132F858BEC001A5654 /* XCTestCase+MemoryLeakTracking.swift */; };
-		B4E1E2142F858BFB001A5654 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E1E2132F858BEC001A5654 /* XCTestCase+MemoryLeakTracking.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +34,6 @@
 		080EDEFA21B6DA7E00813479 /* EssentialFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		080EDF0121B6DA7E00813479 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B46286172F86889D00E60C50 /* EssentialFeedAPIE2ETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeedAPIE2ETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B4E1E2132F858BEC001A5654 /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -46,6 +43,7 @@
 		B48DB9DB2F8D7D36009EB894 /* Feed API */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Feed API"; sourceTree = "<group>"; };
 		B48DB9E32F8D7D3D009EB894 /* Feed API */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Feed API"; sourceTree = "<group>"; };
 		B48DB9EB2F8D7D5C009EB894 /* Feed Feature */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Feed Feature"; sourceTree = "<group>"; };
+		B48DB9EF2F8D7D96009EB894 /* Helpers */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Helpers; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,18 +109,10 @@
 			children = (
 				B48DB9DB2F8D7D36009EB894 /* Feed API */,
 				B48DB9D02F8D7CE5009EB894 /* Feed Cache */,
-				B4E1E2122F858BE5001A5654 /* Helpers */,
+				B48DB9EF2F8D7D96009EB894 /* Helpers */,
 				080EDF0121B6DA7E00813479 /* Info.plist */,
 			);
 			path = EssentialFeedTests;
-			sourceTree = "<group>";
-		};
-		B4E1E2122F858BE5001A5654 /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				B4E1E2132F858BEC001A5654 /* XCTestCase+MemoryLeakTracking.swift */,
-			);
-			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,6 +167,7 @@
 			fileSystemSynchronizedGroups = (
 				B48DB9D02F8D7CE5009EB894 /* Feed Cache */,
 				B48DB9DB2F8D7D36009EB894 /* Feed API */,
+				B48DB9EF2F8D7D96009EB894 /* Helpers */,
 			);
 			name = EssentialFeedTests;
 			productName = EssentialFeedTests;
@@ -198,6 +189,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				B46286182F86889D00E60C50 /* EssentialFeedAPIE2ETests */,
+				B48DB9EF2F8D7D96009EB894 /* Helpers */,
 			);
 			name = EssentialFeedAPIE2ETests;
 			packageProductDependencies = (
@@ -286,7 +278,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B4E1E2142F858BFB001A5654 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,7 +285,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B46286212F86938E00E60C50 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
