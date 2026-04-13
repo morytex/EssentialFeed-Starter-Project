@@ -28,8 +28,8 @@ public final class LocalFeedLoader {
         }
     }
 
-    public func load() {
-        store.retrieveCachedFeed()
+    public func load(completion: @escaping (Error?) -> Void) {
+        store.retrieveCachedFeed(completion: completion)
     }
 
     private func cache(_ feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
