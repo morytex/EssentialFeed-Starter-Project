@@ -19,14 +19,6 @@ func uniqueImage() -> FeedImage {
     return FeedImage(id: UUID(), description: nil, location: nil, url: anyURL())
 }
 
-func anyURL() -> URL {
-    return URL(string: "https://any-url.com")!
-}
-
-func anyNSError() -> NSError {
-    return NSError(domain: "an error", code: 1)
-}
-
 extension Date {
     func adding(days: Int) -> Date {
         return Calendar(identifier: .gregorian)
