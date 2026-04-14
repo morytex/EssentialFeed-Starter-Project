@@ -59,10 +59,10 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
 
         let feedImage = uniqueImageFeed()
         let fixedCurrentDate = Date()
-        let lessThanSevenDaysOldTimestamp = fixedCurrentDate
+        let sevenDaysOldTimestamp = fixedCurrentDate
             .adding(days: -7)
         expect(sut, toCompleteWith: .success([])) {
-            store.completeRetrieval(with: feedImage.locals, timestamp: lessThanSevenDaysOldTimestamp)
+            store.completeRetrieval(with: feedImage.locals, timestamp: sevenDaysOldTimestamp)
         }
     }
 
@@ -71,11 +71,11 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
 
         let feedImage = uniqueImageFeed()
         let fixedCurrentDate = Date()
-        let lessThanSevenDaysOldTimestamp = fixedCurrentDate
+        let moreThanSevenDaysOldTimestamp = fixedCurrentDate
             .adding(days: -7)
             .adding(seconds: -1)
         expect(sut, toCompleteWith: .success([])) {
-            store.completeRetrieval(with: feedImage.locals, timestamp: lessThanSevenDaysOldTimestamp)
+            store.completeRetrieval(with: feedImage.locals, timestamp: moreThanSevenDaysOldTimestamp)
         }
     }
 
