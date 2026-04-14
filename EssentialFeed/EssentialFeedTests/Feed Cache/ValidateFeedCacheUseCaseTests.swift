@@ -35,7 +35,7 @@ final class ValidateFeedCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
 
-    func test_validate_withLessThanSevenDaysOldCachedFeed_shouldNotDeleteCachedFeed() {
+    func test_validateCache_withLessThanSevenDaysOldCachedFeed_shouldNotDeleteCachedFeed() {
         let fixedCurrentDate = Date()
         let (sut, store) = makeSUT { fixedCurrentDate }
 
