@@ -76,7 +76,7 @@ final class CodableFeedStoreTests: XCTestCase {
         super.tearDown()
     }
 
-    func test_retrieveCachedFeed_withEmptyStore_shouldDeliverEmptyResult() {
+    func test_retrieveCachedFeed_withEmptyCache_shouldDeliverEmptyResult() {
         let sut = makeSUT()
 
         let expectation = expectation(description: "Wait for retrieval completion")
@@ -94,7 +94,7 @@ final class CodableFeedStoreTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
-    func test_retrieveCachedFeed_withEmptyStore_whenCalledTwice_shouldHaveNoSideEffect() {
+    func test_retrieveCachedFeed_withEmptyCache_whenCalledTwice_shouldHaveNoSideEffect() {
         let sut = makeSUT()
 
         let expectation = expectation(description: "Wait for both retrieval completion")
@@ -114,7 +114,7 @@ final class CodableFeedStoreTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
-    func test_retrieveCachedFeed_withInsertedValue_shouldDeliverStoredValue() {
+    func test_retrieveCachedFeed_withNonEmptyCache_shouldDeliverStoredValue() {
         let feed = uniqueImageFeed()
         let timestamp = Date()
         let sut = makeSUT()
