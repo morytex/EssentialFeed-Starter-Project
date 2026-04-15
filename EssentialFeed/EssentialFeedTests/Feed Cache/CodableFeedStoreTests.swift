@@ -169,14 +169,7 @@ final class CodableFeedStoreTests: XCTestCase {
     func test_deleteCachedFeed_whenEmptyCache_shouldHaveNoSideEffect() {
         let sut = makeSUT()
 
-        let expectation = expectation(description: "Wait for deletion completion")
-        var receivedError: Error?
-        sut.deleteCachedFeed { error in
-            receivedError = error
-            expectation.fulfill()
-        }
-
-        wait(for: [expectation], timeout: 1.0)
+        let receivedError = deleteCache(from: sut)
         XCTAssertNil(receivedError)
 
         expect(sut, toRetrieve: .empty)
@@ -186,14 +179,7 @@ final class CodableFeedStoreTests: XCTestCase {
         let sut = makeSUT()
         insert(uniqueCache(), to: sut)
 
-        let expectation = expectation(description: "Wait for deletion completion")
-        var receivedError: Error?
-        sut.deleteCachedFeed { error in
-            receivedError = error
-            expectation.fulfill()
-        }
-
-        wait(for: [expectation], timeout: 1.0)
+        let receivedError = deleteCache(from: sut)
         XCTAssertNil(receivedError)
 
         expect(sut, toRetrieve: .empty)
@@ -204,14 +190,7 @@ final class CodableFeedStoreTests: XCTestCase {
             .urls(for: .cachesDirectory, in: .userDomainMask).first!
         let sut = makeSUT(storeURL: noDeletionPermissionURL)
 
-        let expectation = expectation(description: "Wait for deletion completion")
-        var receivedError: Error?
-        sut.deleteCachedFeed { error in
-            receivedError = error
-            expectation.fulfill()
-        }
-
-        wait(for: [expectation], timeout: 1.0)
+        let receivedError = deleteCache(from: sut)
         XCTAssertNotNil(receivedError)
     }
 
@@ -258,6 +237,18 @@ final class CodableFeedStoreTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
 
         return receiverError
+    }
+
+    private func deleteCache(from sut: CodableFeedStore) -> Error? {
+        var receivedError: Error?
+        let expectation = expectation(description: "Wait for deletion completion")
+        sut.deleteCachedFeed { error in
+            receivedError = error
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1.0)
+
+        return receivedError
     }
 
     private func uniqueCache() -> (feed: [LocalFeedImage], timestamp: Date) {
