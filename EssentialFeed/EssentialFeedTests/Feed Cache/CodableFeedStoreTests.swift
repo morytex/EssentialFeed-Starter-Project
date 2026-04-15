@@ -86,7 +86,7 @@ final class CodableFeedStoreTests: XCTestCase {
     }
 
     func test_retrieveCachedFeed_withEmptyStore_shouldDeliverEmptyResult() {
-        let sut = CodableFeedStore()
+        let sut = makeSUT()
 
         let expectation = expectation(description: "Wait for retrieval completion")
         sut.retrieveCachedFeed { result in
@@ -104,7 +104,7 @@ final class CodableFeedStoreTests: XCTestCase {
     }
 
     func test_retrieveCachedFeed_withEmptyStore_whenCalledTwice_shouldHaveNoSideEffect() {
-        let sut = CodableFeedStore()
+        let sut = makeSUT()
 
         let expectation = expectation(description: "Wait for both retrieval completion")
         sut.retrieveCachedFeed { firstResult in
@@ -126,7 +126,7 @@ final class CodableFeedStoreTests: XCTestCase {
     func test_retrieveCachedFeed_withInsertedValue_shouldDeliverStoredValue() {
         let feed = uniqueImageFeed()
         let timestamp = Date()
-        let sut = CodableFeedStore()
+        let sut = makeSUT()
 
         let expectation = expectation(description: "Wait for retrieval completion")
         sut.insert(feed.locals, timestamp: timestamp) { error in
@@ -145,5 +145,11 @@ final class CodableFeedStoreTests: XCTestCase {
         }
 
         wait(for: [expectation], timeout: 1.0)
+    }
+
+    // MARK: - Helpers
+
+    private func makeSUT() -> CodableFeedStore {
+        return CodableFeedStore()
     }
 }
