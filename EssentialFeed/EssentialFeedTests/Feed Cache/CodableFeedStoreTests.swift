@@ -93,20 +93,19 @@ final class CodableFeedStoreTests: XCTestCase {
         let timestamp = Date()
         let sut = makeSUT()
 
-        let expectation = expectation(description: "Wait for retrieval completion")
-        sut.insert(feed.locals, timestamp: timestamp) { error in
-            XCTAssertNil(error, "Expected feed to be inserted successfully")
-            sut.retrieveCachedFeed { result in
-                switch result {
-                case let .found(receivedFeed, receivedTimestamp):
-                    XCTAssertEqual(receivedFeed, feed.locals)
-                    XCTAssertEqual(receivedTimestamp, timestamp)
-                default:
-                    XCTFail("Expected to retrieve \(feed) and \(timestamp), but got \(result)")
-                }
+        insert(in: sut, feed: feed.locals, timestamp: timestamp)
 
-                expectation.fulfill( )
+        let expectation = expectation(description: "Wait for retrieval completion")
+        sut.retrieveCachedFeed { result in
+            switch result {
+            case let .found(receivedFeed, receivedTimestamp):
+                XCTAssertEqual(receivedFeed, feed.locals)
+                XCTAssertEqual(receivedTimestamp, timestamp)
+            default:
+                XCTFail("Expected to retrieve \(feed) and \(timestamp), but got \(result)")
             }
+
+            expectation.fulfill( )
         }
 
         wait(for: [expectation], timeout: 1.0)
@@ -117,24 +116,23 @@ final class CodableFeedStoreTests: XCTestCase {
         let timestamp = Date()
         let sut = makeSUT()
 
+        insert(in: sut, feed: feed.locals, timestamp: timestamp)
+
         let expectation = expectation(description: "Wait for retrieval completion")
-        sut.insert(feed.locals, timestamp: timestamp) { error in
-            XCTAssertNil(error, "Expected feed to be inserted successfully")
-            sut.retrieveCachedFeed { firstResult in
-                sut.retrieveCachedFeed { secondResult in
-                    switch (firstResult, secondResult) {
-                    case let (.found(firstFeed, firstTimestamp), .found(secondFeed, secondTimestamp)):
-                        XCTAssertEqual(firstFeed, feed.locals)
-                        XCTAssertEqual(firstTimestamp, timestamp)
-
-                        XCTAssertEqual(secondFeed, feed.locals)
-                        XCTAssertEqual(secondTimestamp, timestamp)
-                    default:
-                        XCTFail("Expected to retrieve \(feed) and \(timestamp), but got \(firstResult) and \(secondResult)")
-                    }
-
-                    expectation.fulfill( )
+        sut.retrieveCachedFeed { firstResult in
+            sut.retrieveCachedFeed { secondResult in
+                switch (firstResult, secondResult) {
+                case let (.found(firstFeed, firstTimestamp), .found(secondFeed, secondTimestamp)):
+                    XCTAssertEqual(firstFeed, feed.locals)
+                    XCTAssertEqual(firstTimestamp, timestamp)
+                    
+                    XCTAssertEqual(secondFeed, feed.locals)
+                    XCTAssertEqual(secondTimestamp, timestamp)
+                default:
+                    XCTFail("Expected to retrieve \(feed) and \(timestamp), but got \(firstResult) and \(secondResult)")
                 }
+                
+                expectation.fulfill( )
             }
         }
 
@@ -166,6 +164,15 @@ final class CodableFeedStoreTests: XCTestCase {
                 XCTFail("Expected result to be \(result), but got \(receivedResult)")
             }
             expectation.fulfill( )
+        }
+        wait(for: [expectation], timeout: 1.0)
+    }
+
+    private func insert(in sut: CodableFeedStore, feed: [LocalFeedImage], timestamp: Date) {
+        let expectation = expectation(description: "Wait for retrieval completion")
+        sut.insert(feed, timestamp: timestamp) { error in
+            XCTAssertNil(error, "Expected feed to be inserted successfully")
+            expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1.0)
     }
