@@ -88,7 +88,7 @@ final class CodableFeedStoreTests: XCTestCase {
         expect(sut, toRetrieveTwice: .empty)
     }
 
-    func test_retrieveCachedFeed_withNonEmptyCache_shouldDeliverStoredValue() {
+    func test_retrieveCachedFeed_withNonEmptyCache_shouldDeliverFoundResult() {
         let feed = uniqueImageFeed()
         let timestamp = Date()
         let sut = makeSUT()
