@@ -92,25 +92,21 @@ final class CodableFeedStoreTests: XCTestCase {
     }
 
     func test_retrieveCachedFeed_withNonEmptyCache_shouldDeliverFoundResult() {
-        let feed = uniqueImageFeed()
-        let timestamp = Date()
-        let cache = (feed: feed.locals, timestamp: timestamp)
+        let cache = uniqueCache()
         let sut = makeSUT()
 
         insert(cache, to: sut)
 
-        expect(sut, toRetrieve: .found(feed: feed.locals, timestamp: timestamp))
+        expect(sut, toRetrieve: .found(feed: cache.feed, timestamp: cache.timestamp))
     }
 
     func test_retrieveCachedFeed_withNonEmptyCache_whenCalledTwice_shouldHaveNoSideEffect() {
-        let feed = uniqueImageFeed()
-        let timestamp = Date()
-        let cache = (feed: feed.locals, timestamp: timestamp)
+        let cache = uniqueCache()
         let sut = makeSUT()
 
         insert(cache, to: sut)
 
-        expect(sut, toRetrieveTwice: .found(feed: feed.locals, timestamp: timestamp))
+        expect(sut, toRetrieveTwice: .found(feed: cache.feed, timestamp: cache.timestamp))
     }
 
     func test_retrieveCachedFeed_withInvalidData_shouldDeliverFailureResult() {
@@ -130,6 +126,17 @@ final class CodableFeedStoreTests: XCTestCase {
 
         expect(sut, toRetrieveTwice: .failure(anyNSError()))
     }
+
+//    func test_insert_withPreviousInsertion_shouldOverridePreviousInsertion() {
+//        let feed = uniqueImageFeed()
+//        let timestamp = Date()
+//        let cache = (feed: feed.locals, timestamp: timestamp)
+//        let sut = makeSUT()
+//
+//        insert(cache, to: sut)
+//
+//        expect(sut, toRetrieveTwice: .failure(anyNSError()))
+//    }
 
     // MARK: - Helpers
 
@@ -170,6 +177,12 @@ final class CodableFeedStoreTests: XCTestCase {
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1.0)
+    }
+
+    private func uniqueCache() -> (feed: [LocalFeedImage], timestamp: Date) {
+        let feed = uniqueImageFeed()
+        let timestamp = Date()
+        return (feed: feed.locals, timestamp: timestamp)
     }
 
     private func testSpecificStoreURL() -> URL {
