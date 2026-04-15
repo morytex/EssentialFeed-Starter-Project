@@ -44,8 +44,16 @@ private final class CodableFeedStore {
     }
 
     func deleteCachedFeed(completion: @escaping FeedStore.DeleteCompletion) {
-        try? FileManager.default.removeItem(at: storeURL)
-        completion(nil)
+        guard FileManager.default.fileExists(atPath: storeURL.path) else {
+            return completion(nil)
+        }
+
+        do {
+            try FileManager.default.removeItem(at: storeURL)
+            completion(nil)
+        } catch {
+            completion(error)
+        }
     }
 
     func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping FeedStore.InsertCompletion) {
@@ -149,7 +157,7 @@ final class CodableFeedStoreTests: XCTestCase {
     }
 
     func test_insert_whenInvalidStoreURL_shouldDeliverError() {
-        let invalidStoreURL = anyURL()
+        let invalidStoreURL = URL(string: "invalid://store-url")
         let cache = uniqueCache()
         let sut = makeSUT(storeURL: invalidStoreURL)
 
@@ -189,6 +197,22 @@ final class CodableFeedStoreTests: XCTestCase {
         XCTAssertNil(receivedError)
 
         expect(sut, toRetrieve: .empty)
+    }
+
+    func test_deleteCachedFeed_whenNoDeletionPermissionURL_shouldDeliverError() {
+        let noDeletionPermissionURL = FileManager.default
+            .urls(for: .cachesDirectory, in: .userDomainMask).first!
+        let sut = makeSUT(storeURL: noDeletionPermissionURL)
+
+        let expectation = expectation(description: "Wait for deletion completion")
+        var receivedError: Error?
+        sut.deleteCachedFeed { error in
+            receivedError = error
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertNotNil(receivedError)
     }
 
     // MARK: - Helpers
