@@ -15,7 +15,7 @@ private final class CodableFeedStore {
 }
 
 final class CodableFeedStoreTests: XCTestCase {
-    func test_retrieveCachedFeed_whenEmptyStore_shouldDeliverEmptyResult() {
+    func test_retrieveCachedFeed_withEmptyStore_shouldDeliverEmptyResult() {
         let sut = CodableFeedStore()
 
         let expectation = expectation(description: "Wait for retrieval completion")
@@ -28,6 +28,26 @@ final class CodableFeedStoreTests: XCTestCase {
             }
 
             expectation.fulfill( )
+        }
+
+        wait(for: [expectation], timeout: 1.0)
+    }
+
+    func test_retrieveCachedFeed_withEmptyStore_whenCalledTwice_shouldHaveNoSideEffect() {
+        let sut = CodableFeedStore()
+
+        let expectation = expectation(description: "Wait for both retrieval completion")
+        sut.retrieveCachedFeed { firstResult in
+            sut.retrieveCachedFeed { secondResult in
+                switch (firstResult, secondResult) {
+                case (.empty, .empty):
+                    break
+                default:
+                    XCTFail("Expected empty result on both calls")
+                }
+
+                expectation.fulfill( )
+            }
         }
 
         wait(for: [expectation], timeout: 1.0)
