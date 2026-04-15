@@ -85,8 +85,7 @@ final class CodableFeedStoreTests: XCTestCase {
     func test_retrieveCachedFeed_withEmptyCache_whenCalledTwice_shouldHaveNoSideEffect() {
         let sut = makeSUT()
 
-        expect(sut, toRetrieve: .empty)
-        expect(sut, toRetrieve: .empty)
+        expect(sut, toRetrieveTwice: .empty)
     }
 
     func test_retrieveCachedFeed_withNonEmptyCache_shouldDeliverStoredValue() {
@@ -150,6 +149,11 @@ final class CodableFeedStoreTests: XCTestCase {
         trackForMemoryLeaks(on: sut, file: file, line: line)
 
         return sut
+    }
+
+    private func expect(_ sut: CodableFeedStore, toRetrieveTwice result: RetrieveCachedFeedResult) {
+        expect(sut, toRetrieve: result)
+        expect(sut, toRetrieve: result)
     }
 
     private func expect(_ sut: CodableFeedStore, toRetrieve result: RetrieveCachedFeedResult) {
