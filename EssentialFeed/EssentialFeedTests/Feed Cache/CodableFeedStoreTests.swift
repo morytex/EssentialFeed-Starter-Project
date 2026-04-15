@@ -43,6 +43,10 @@ private final class CodableFeedStore {
         self.storeURL = storeURL
     }
 
+    func deleteCachedFeed(completion: @escaping FeedStore.DeleteCompletion) {
+        completion(nil)
+    }
+
     func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping FeedStore.InsertCompletion) {
         let encoder = JSONEncoder()
         do {
@@ -151,6 +155,22 @@ final class CodableFeedStoreTests: XCTestCase {
         let insertionError = insert(cache, to: sut)
 
         XCTAssertNotNil(insertionError)
+    }
+
+    func test_deleteCachedFeed_whenEmptyCache_shouldHaveNoSideEffect() {
+        let sut = makeSUT()
+
+        let expectation = expectation(description: "Wait for deletion completion")
+        var receivedError: Error?
+        sut.deleteCachedFeed { error in
+            receivedError = error
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertNil(receivedError)
+
+        expect(sut, toRetrieve: .empty)
     }
 
     // MARK: - Helpers
