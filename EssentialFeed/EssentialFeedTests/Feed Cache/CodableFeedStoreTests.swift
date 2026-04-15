@@ -91,9 +91,10 @@ final class CodableFeedStoreTests: XCTestCase {
     func test_retrieveCachedFeed_withNonEmptyCache_shouldDeliverFoundResult() {
         let feed = uniqueImageFeed()
         let timestamp = Date()
+        let cache = (feed: feed.locals, timestamp: timestamp)
         let sut = makeSUT()
 
-        insert(in: sut, feed: feed.locals, timestamp: timestamp)
+        insert(cache, to: sut)
 
         expect(sut, toRetrieve: .found(feed: feed.locals, timestamp: timestamp))
     }
@@ -101,9 +102,10 @@ final class CodableFeedStoreTests: XCTestCase {
     func test_retrieveCachedFeed_withNonEmptyCache_whenCalledTwice_shouldHaveNoSideEffect() {
         let feed = uniqueImageFeed()
         let timestamp = Date()
+        let cache = (feed: feed.locals, timestamp: timestamp)
         let sut = makeSUT()
 
-        insert(in: sut, feed: feed.locals, timestamp: timestamp)
+        insert(cache, to: sut)
 
         expect(sut, toRetrieveTwice: .found(feed: feed.locals, timestamp: timestamp))
     }
@@ -140,9 +142,9 @@ final class CodableFeedStoreTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
-    private func insert(in sut: CodableFeedStore, feed: [LocalFeedImage], timestamp: Date) {
+    private func insert(_ cache: (feed: [LocalFeedImage], timestamp: Date), to sut: CodableFeedStore) {
         let expectation = expectation(description: "Wait for retrieval completion")
-        sut.insert(feed, timestamp: timestamp) { error in
+        sut.insert(cache.feed, timestamp: cache.timestamp) { error in
             XCTAssertNil(error, "Expected feed to be inserted successfully")
             expectation.fulfill()
         }
