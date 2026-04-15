@@ -79,39 +79,14 @@ final class CodableFeedStoreTests: XCTestCase {
     func test_retrieveCachedFeed_withEmptyCache_shouldDeliverEmptyResult() {
         let sut = makeSUT()
 
-        let expectation = expectation(description: "Wait for retrieval completion")
-        sut.retrieveCachedFeed { result in
-            switch result {
-            case .empty:
-                break
-            default:
-                XCTFail("Expected empty result")
-            }
-
-            expectation.fulfill( )
-        }
-
-        wait(for: [expectation], timeout: 1.0)
+        expect(sut, toRetrieve: .empty)
     }
 
     func test_retrieveCachedFeed_withEmptyCache_whenCalledTwice_shouldHaveNoSideEffect() {
         let sut = makeSUT()
 
-        let expectation = expectation(description: "Wait for both retrieval completion")
-        sut.retrieveCachedFeed { firstResult in
-            sut.retrieveCachedFeed { secondResult in
-                switch (firstResult, secondResult) {
-                case (.empty, .empty):
-                    break
-                default:
-                    XCTFail("Expected empty result on both calls, but got \(firstResult) and \(secondResult)")
-                }
-
-                expectation.fulfill( )
-            }
-        }
-
-        wait(for: [expectation], timeout: 1.0)
+        expect(sut, toRetrieve: .empty)
+        expect(sut, toRetrieve: .empty)
     }
 
     func test_retrieveCachedFeed_withNonEmptyCache_shouldDeliverStoredValue() {
@@ -175,6 +150,20 @@ final class CodableFeedStoreTests: XCTestCase {
         trackForMemoryLeaks(on: sut, file: file, line: line)
 
         return sut
+    }
+
+    private func expect(_ sut: CodableFeedStore, toRetrieve result: RetrieveCachedFeedResult) {
+        let expectation = expectation(description: "Wait for retrieval completion")
+        sut.retrieveCachedFeed { receivedResult in
+            switch (receivedResult, result) {
+            case (.empty, .empty):
+                break
+            default:
+                XCTFail("Expected result to be \(result), but got \(receivedResult)")
+            }
+            expectation.fulfill( )
+        }
+        wait(for: [expectation], timeout: 1.0)
     }
 
     private func storeURL() -> URL {
