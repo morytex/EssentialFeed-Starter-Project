@@ -104,7 +104,7 @@ final class CodableFeedStoreTests: XCTestCase {
                 case (.empty, .empty):
                     break
                 default:
-                    XCTFail("Expected empty result on both calls")
+                    XCTFail("Expected empty result on both calls, but got \(firstResult) and \(secondResult)")
                 }
 
                 expectation.fulfill( )
@@ -128,7 +128,7 @@ final class CodableFeedStoreTests: XCTestCase {
                     XCTAssertEqual(receivedFeed, feed.locals)
                     XCTAssertEqual(receivedTimestamp, timestamp)
                 default:
-                    XCTFail("Expected to retrieve \(feed) and \(timestamp), but got result \(result)")
+                    XCTFail("Expected to retrieve \(feed) and \(timestamp), but got \(result)")
                 }
 
                 expectation.fulfill( )
