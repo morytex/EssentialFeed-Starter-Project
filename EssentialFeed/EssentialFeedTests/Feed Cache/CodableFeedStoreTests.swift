@@ -71,15 +71,14 @@ final class CodableFeedStoreTests: XCTestCase {
     func test_insert_withPreviousInsertion_shouldOverridePreviousInsertion() {
         let sut = makeSUT()
 
-        let firstCache = uniqueCache()
-        let firstInsertionError = insert(firstCache, to: sut)
+        let firstInsertionError = insert(uniqueCache(), to: sut)
         XCTAssertNil(firstInsertionError)
 
-        let secondCache = uniqueCache()
-        let secondInsertionError = insert(secondCache, to: sut)
-        XCTAssertNil(secondInsertionError)
+        let latestCache = uniqueCache()
+        let latestInsertionError = insert(latestCache, to: sut)
 
-        expect(sut, toRetrieve: .found(feed: secondCache.feed, timestamp: secondCache.timestamp))
+        XCTAssertNil(latestInsertionError)
+        expect(sut, toRetrieve: .found(feed: latestCache.feed, timestamp: latestCache.timestamp))
     }
 
     func test_insert_whenInvalidStoreURL_shouldDeliverError() {
@@ -116,6 +115,7 @@ final class CodableFeedStoreTests: XCTestCase {
         let sut = makeSUT(storeURL: noDeletionPermissionURL)
 
         let receivedError = deleteCache(from: sut)
+
         XCTAssertNotNil(receivedError)
     }
 
