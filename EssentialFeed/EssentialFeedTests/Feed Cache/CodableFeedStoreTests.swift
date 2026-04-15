@@ -113,13 +113,22 @@ final class CodableFeedStoreTests: XCTestCase {
         expect(sut, toRetrieveTwice: .found(feed: feed.locals, timestamp: timestamp))
     }
 
-    func test_retrieveCachedFeed_whenInvalidData_shouldDeliverFailureResult() {
+    func test_retrieveCachedFeed_withInvalidData_shouldDeliverFailureResult() {
         let storeURL = testSpecificStoreURL()
         let sut = makeSUT(storeURL: storeURL)
 
         try! "invalid data".write(to: storeURL, atomically: false, encoding: .utf8)
 
         expect(sut, toRetrieve: .failure(anyNSError()))
+    }
+
+    func test_retrieveCachedFeed_withInvalidData_whenCalledTwice_shouldHaveNoSideEffect() {
+        let storeURL = testSpecificStoreURL()
+        let sut = makeSUT(storeURL: storeURL)
+
+        try! "invalid data".write(to: storeURL, atomically: false, encoding: .utf8)
+
+        expect(sut, toRetrieveTwice: .failure(anyNSError()))
     }
 
     // MARK: - Helpers
