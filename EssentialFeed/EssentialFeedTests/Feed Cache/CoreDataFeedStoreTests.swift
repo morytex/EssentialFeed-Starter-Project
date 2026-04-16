@@ -6,10 +6,23 @@
 //
 
 import XCTest
+import EssentialFeed
+
+private final class CoreDataFeedStore: FeedStore {
+    func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertCompletion) {}
+
+    func deleteCachedFeed(completion: @escaping DeleteCompletion) { }
+
+    func retrieveCachedFeed(completion: @escaping RetrieveCompletion) {
+        completion(.empty)
+    }
+}
 
 final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
     func test_retrieveCachedFeed_withEmptyCache_shouldDeliverEmptyResult() {
+        let sut = CoreDataFeedStore()
 
+        assertThatRetrieveDeliversEmptyOnEmptyCache(on: sut)
     }
 
     func test_retrieveCachedFeed_withEmptyCache_shouldHaveNoSideEffect() {
