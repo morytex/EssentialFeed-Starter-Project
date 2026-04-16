@@ -41,6 +41,15 @@ extension FeedStoreSpecs where Self: XCTestCase {
         XCTAssertNil(receivedError, file: file, line: line)
     }
 
+    func assertThatInsertDoesNotReturnErrorOnNonEmptyCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
+        insert(uniqueCache(), to: sut)
+
+        let latestCache = uniqueCache()
+        let receivedError = insert(latestCache, to: sut)
+
+        XCTAssertNil(receivedError, file: file, line: line)
+    }
+
     func assertThatInsertOverridesPreviousInsertion(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
         let firstInsertionError = insert(uniqueCache(), to: sut)
         XCTAssertNil(firstInsertionError, file: file, line: line)
