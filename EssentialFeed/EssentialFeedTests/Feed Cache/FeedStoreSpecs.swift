@@ -24,12 +24,12 @@ protocol FailableRetrieveFeedStoreSpecs: FeedStoreSpecs {
 }
 
 protocol FailableInsertFeedStoreSpecs: FeedStoreSpecs {
-    func test_insert_whenInvalidStoreURL_shouldDeliverError()
+    func test_insert_whenInvalidStoreURL_shouldDeliverFailureResult()
     func test_insert_whenInvalidStoreURL_shouldHaveNoSideEffects()
 }
 
 protocol FailableDeleteFeedStoreSpecs: FeedStoreSpecs {
-    func test_deleteCachedFeed_whenNoDeletionPermissionURL_shouldDeliverError()
+    func test_deleteCachedFeed_whenNoDeletionPermissionURL_shouldDeliverFailureResult()
     func test_deleteCachedFeed_whenNoDeletionPermissionURL_shouldHaveNoSideEffects()
 }
 
