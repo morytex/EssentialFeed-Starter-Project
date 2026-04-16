@@ -63,7 +63,9 @@ public final class CoreDataFeedStore: FeedStore {
         }
     }
 
-    public func deleteCachedFeed(completion: @escaping DeleteCompletion) { }
+    public func deleteCachedFeed(completion: @escaping DeleteCompletion) {
+        completion(nil)
+    }
 
     public func retrieveCachedFeed(completion: @escaping RetrieveCompletion) {
         let context = self.context
