@@ -7,30 +7,6 @@
 
 import XCTest
 import EssentialFeed
-import CoreData
-
-private class ManagedCache: NSManagedObject {
-    @NSManaged var timestamp: Date
-    @NSManaged var feed: NSOrderedSet
-}
-
-private class ManagedFeedImage: NSManagedObject {
-    @NSManaged var id: UUID
-    @NSManaged var imageDescription: String?
-    @NSManaged var location: String?
-    @NSManaged var url: URL
-    @NSManaged var cache: ManagedCache
-}
-
-private final class CoreDataFeedStore: FeedStore {
-    func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertCompletion) {}
-
-    func deleteCachedFeed(completion: @escaping DeleteCompletion) { }
-
-    func retrieveCachedFeed(completion: @escaping RetrieveCompletion) {
-        completion(.empty)
-    }
-}
 
 final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
     func test_retrieveCachedFeed_withEmptyCache_shouldDeliverEmptyResult() {
@@ -80,7 +56,8 @@ final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
     // MARK: - Helpers
 
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
-        let sut = CoreDataFeedStore()
+        let storeBundle = Bundle(for: CoreDataFeedStore.self)
+        let sut = try! CoreDataFeedStore(bundle: storeBundle)
 
         trackForMemoryLeaks(on: sut, file: file, line: line)
 
