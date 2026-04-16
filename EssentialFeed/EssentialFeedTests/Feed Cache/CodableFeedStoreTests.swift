@@ -59,7 +59,7 @@ final class CodableFeedStoreTests: XCTestCase {
         expect(sut, toRetrieve: .failure(anyNSError()))
     }
 
-    func test_retrieveCachedFeed_withInvalidData_whenCalledTwice_shouldHaveNoSideEffect() {
+    func test_retrieveCachedFeed_withInvalidData_shouldHaveNoSideEffect() {
         let storeURL = testSpecificStoreURL()
         let sut = makeSUT(storeURL: storeURL)
 
@@ -91,6 +91,16 @@ final class CodableFeedStoreTests: XCTestCase {
         XCTAssertNotNil(insertionError)
     }
 
+    func test_insert_whenInvalidStoreURL_shouldHaveNoSideEffects() {
+        let invalidStoreURL = URL(string: "invalid://store-url")
+        let cache = uniqueCache()
+        let sut = makeSUT(storeURL: invalidStoreURL)
+
+        insert(cache, to: sut)
+
+        expect(sut, toRetrieve: .empty)
+    }
+
     func test_deleteCachedFeed_whenEmptyCache_shouldHaveNoSideEffect() {
         let sut = makeSUT()
 
@@ -117,6 +127,15 @@ final class CodableFeedStoreTests: XCTestCase {
         let receivedError = deleteCache(from: sut)
 
         XCTAssertNotNil(receivedError)
+    }
+
+    func test_deleteCachedFeed_whenNoDeletionPermissionURL_shouldHaveNoSideEffects() {
+        let noDeletionPermissionURL = cachesDirectory()
+        let sut = makeSUT(storeURL: noDeletionPermissionURL)
+
+        deleteCache(from: sut)
+
+        expect(sut, toRetrieve: .empty)
     }
 
     func test_feedStore_whenSideEffectsRunSerially_shouldExecuteInCallOrder() {
@@ -186,6 +205,7 @@ final class CodableFeedStoreTests: XCTestCase {
         return receiverError
     }
 
+    @discardableResult
     private func deleteCache(from sut: FeedStore) -> Error? {
         var receivedError: Error?
         let expectation = expectation(description: "Wait for deletion completion")
