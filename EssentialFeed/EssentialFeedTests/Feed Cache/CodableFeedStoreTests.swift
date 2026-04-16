@@ -119,6 +119,28 @@ final class CodableFeedStoreTests: XCTestCase {
         XCTAssertNotNil(receivedError)
     }
 
+    func test_feedStore_whenSideEffectsRunSerially_shouldExecuteInCallOrder() {
+        let cache = uniqueCache()
+        let sut = makeSUT(storeURL: testSpecificStoreURL())
+
+        let expectation1 = expectation(description: "Wait for first operation")
+        sut.insert(cache.feed, timestamp: cache.timestamp) { _ in
+            expectation1.fulfill()
+        }
+
+        let expectation2 = expectation(description: "Wait for second completion")
+        sut.deleteCachedFeed { _ in
+            expectation2.fulfill()
+        }
+
+        let expectation3 = expectation(description: "Wait for third operation")
+        sut.insert(cache.feed, timestamp: cache.timestamp) { _ in
+            expectation3.fulfill()
+        }
+
+        wait(for: [expectation1, expectation2, expectation3], timeout: 1.0, enforceOrder: true)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(storeURL: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
@@ -154,7 +176,7 @@ final class CodableFeedStoreTests: XCTestCase {
     @discardableResult
     private func insert(_ cache: (feed: [LocalFeedImage], timestamp: Date), to sut: FeedStore) -> Error? {
         var receiverError: Error?
-        let expectation = expectation(description: "Wait for retrieval completion")
+        let expectation = expectation(description: "Wait for insertion completion")
         sut.insert(cache.feed, timestamp: cache.timestamp) { error in
             receiverError = error
             expectation.fulfill()
