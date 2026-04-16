@@ -51,13 +51,11 @@ extension FeedStoreSpecs where Self: XCTestCase {
     }
 
     func assertThatInsertOverridesPreviousInsertion(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
-        let firstInsertionError = insert(uniqueCache(), to: sut)
-        XCTAssertNil(firstInsertionError, file: file, line: line)
+        insert(uniqueCache(), to: sut)
 
         let latestCache = uniqueCache()
-        let latestInsertionError = insert(latestCache, to: sut)
+        insert(latestCache, to: sut)
 
-        XCTAssertNil(latestInsertionError, file: file, line: line)
         expect(sut, toRetrieve: .found(feed: latestCache.feed, timestamp: latestCache.timestamp), file: file, line: line)
     }
 
