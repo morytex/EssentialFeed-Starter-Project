@@ -62,6 +62,12 @@ final class CodableFeedStoreTests: XCTestCase, FailableFeedStoreSpecs {
         assertThatRetrieveHasNoSideEffectOnRetrievalError(on: sut)
     }
 
+    func test_insert_withEmptyCache_shouldNotDeliverError() {
+        let sut = makeSUT()
+
+        assertThatInsertDoesNotReturnErrorOnEmptyCache(on: sut)
+    }
+
     func test_insert_withPreviousInsertion_shouldOverridePreviousInsertion() {
         let sut = makeSUT()
 

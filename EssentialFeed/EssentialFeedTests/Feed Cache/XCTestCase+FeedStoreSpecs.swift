@@ -33,6 +33,14 @@ extension FeedStoreSpecs where Self: XCTestCase {
         expect(sut, toRetrieveTwice: .found(feed: cache.feed, timestamp: cache.timestamp), file: file, line: line)
     }
 
+    func assertThatInsertDoesNotReturnErrorOnEmptyCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
+        let cache = uniqueCache()
+
+        let receivedError = insert(cache, to: sut)
+
+        XCTAssertNil(receivedError, file: file, line: line)
+    }
+
     func assertThatInsertOverridesPreviousInsertion(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
         let firstInsertionError = insert(uniqueCache(), to: sut)
         XCTAssertNil(firstInsertionError, file: file, line: line)

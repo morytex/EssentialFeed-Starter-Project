@@ -10,6 +10,7 @@ protocol FeedStoreSpecs {
     func test_retrieveCachedFeed_withEmptyCache_shouldHaveNoSideEffect()
     func test_retrieveCachedFeed_withNonEmptyCache_shouldDeliverFoundResult()
     func test_retrieveCachedFeed_withNonEmptyCache_shouldHaveNoSideEffect()
+    func test_insert_withEmptyCache_shouldNotDeliverError()
     func test_insert_withPreviousInsertion_shouldOverridePreviousInsertion()
     func test_deleteCachedFeed_whenEmptyCache_shouldNotDeliverError()
     func test_deleteCachedFeed_whenEmptyCache_shouldHaveNoSideEffect()
