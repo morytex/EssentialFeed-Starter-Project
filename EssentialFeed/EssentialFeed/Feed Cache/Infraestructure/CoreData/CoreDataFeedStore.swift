@@ -45,8 +45,6 @@ public final class CoreDataFeedStore: FeedStore {
     public func retrieveCachedFeed(completion: @escaping RetrieveCompletion) {
         perform { context in
             do {
-                let request = NSFetchRequest<ManagedCache>(entityName: ManagedCache.entity().name!)
-                request.returnsObjectsAsFaults = false
                 if let cache = try ManagedCache.find(in: context) {
                     completion(.found(feed: cache.localFeed, timestamp: cache.timestamp))
                 } else {
