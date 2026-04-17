@@ -70,6 +70,8 @@
 		B4F1AAD32F926ACB002D824D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"Feed Cache/Helpers/FeedCacheTestHelpers.swift",
+				Helpers/SharedTestHelpers.swift,
 				"Helpers/XCTestCase+MemoryLeakTracking.swift",
 			);
 			target = B4B6154A2F9264A70066F7B6 /* EssentialFeedCacheIntegrationTests */;

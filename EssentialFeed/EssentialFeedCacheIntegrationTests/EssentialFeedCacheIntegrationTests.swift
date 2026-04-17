@@ -39,6 +39,32 @@ final class EssentialFeedCacheIntegrationTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
+    func test_load_whenItemsSavedOnPreviousInstance_shouldDeliverSavedItemsOnCurrentInstance() throws {
+        let sutToPerformSave = try makeSUT()
+        let sutToPerformLoad = try makeSUT()
+        let feed = uniqueImageFeed().models
+
+        let saveExpectation = expectation(description: "Wait for save to complete")
+        sutToPerformSave.save(feed) { saveError in
+            XCTAssertNil(saveError, "Expected save to not fail")
+            saveExpectation.fulfill()
+        }
+        wait(for: [saveExpectation], timeout: 1.0)
+        
+        let loadExpectation = expectation(description: "Wait for load to complete")
+        sutToPerformLoad.load { result in
+            switch result {
+            case let .success(imageFeed):
+                XCTAssertEqual(imageFeed, feed)
+            case let .failure(error):
+                XCTFail("Expected successful feed result, but got \(error) instead")
+            }
+            loadExpectation.fulfill()
+        }
+
+        wait(for: [loadExpectation], timeout: 1.0)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) throws -> LocalFeedLoader {
