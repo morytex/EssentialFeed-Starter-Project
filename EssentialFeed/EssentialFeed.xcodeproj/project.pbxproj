@@ -67,11 +67,18 @@
 			);
 			target = 080EDEF021B6DA7E00813479 /* EssentialFeed */;
 		};
+		B4F1AAD32F926ACB002D824D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Helpers/XCTestCase+MemoryLeakTracking.swift",
+			);
+			target = B4B6154A2F9264A70066F7B6 /* EssentialFeedCacheIntegrationTests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B46286182F86889D00E60C50 /* EssentialFeedAPIE2ETests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = EssentialFeedAPIE2ETests; sourceTree = "<group>"; };
-		B48DB9FD2F8D7DBF009EB894 /* EssentialFeedTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B48DBA062F8D7DC0009EB894 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, B48DBA072F8D7DC0009EB894 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = EssentialFeedTests; sourceTree = "<group>"; };
+		B48DB9FD2F8D7DBF009EB894 /* EssentialFeedTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B48DBA062F8D7DC0009EB894 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, B48DBA072F8D7DC0009EB894 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, B4F1AAD32F926ACB002D824D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = EssentialFeedTests; sourceTree = "<group>"; };
 		B48DBA152F8D7DEF009EB894 /* EssentialFeed */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B48DBA202F8D7DF0009EB894 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = EssentialFeed; sourceTree = "<group>"; };
 		B4B6154C2F9264A70066F7B6 /* EssentialFeedCacheIntegrationTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = EssentialFeedCacheIntegrationTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
