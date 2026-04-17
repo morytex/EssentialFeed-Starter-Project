@@ -21,7 +21,7 @@ final class EssentialFeedCacheIntegrationTests: XCTestCase {
 
         super.tearDown()
     }
-    
+
     func test_load_withEmptyCache_shouldDeliverNoItems() throws {
         let sut = try makeSUT()
 
@@ -33,36 +33,20 @@ final class EssentialFeedCacheIntegrationTests: XCTestCase {
         let sutToPerformLoad = try makeSUT()
         let feed = uniqueImageFeed().models
 
-        let saveExpectation = expectation(description: "Wait for save to complete")
-        sutToPerformSave.save(feed) { saveError in
-            XCTAssertNil(saveError, "Expected save to not fail")
-            saveExpectation.fulfill()
-        }
-        wait(for: [saveExpectation], timeout: 1.0)
+        save(feed, with: sutToPerformSave)
 
         expect(sutToPerformLoad, toLoad: feed)
     }
 
     func test_save_whenItemsSavedOnPreviousInstance_shouldOverrideWithItemsOnCurrentInstance() throws {
         let sutToPerformFirstSave = try makeSUT()
-        let sutToPerformSecondSave = try makeSUT()
+        let sutToPerformLastSave = try makeSUT()
         let sutToPerformLoad = try makeSUT()
         let firstFeed = uniqueImageFeed().models
         let latestFeed = uniqueImageFeed().models
 
-        let saveExpectation1 = expectation(description: "Wait for save to complete")
-        sutToPerformFirstSave.save(firstFeed) { saveError in
-            XCTAssertNil(saveError, "Expected save to not fail")
-            saveExpectation1.fulfill()
-        }
-        wait(for: [saveExpectation1], timeout: 1.0)
-
-        let saveExpectation2 = expectation(description: "Wait for save to complete")
-        sutToPerformSecondSave.save(latestFeed) { saveError in
-            XCTAssertNil(saveError, "Expected save to not fail")
-            saveExpectation2.fulfill()
-        }
-        wait(for: [saveExpectation2], timeout: 1.0)
+        save(firstFeed, with: sutToPerformFirstSave)
+        save(latestFeed, with: sutToPerformLastSave)
 
         expect(sutToPerformLoad, toLoad: latestFeed)
     }
@@ -94,6 +78,15 @@ final class EssentialFeedCacheIntegrationTests: XCTestCase {
         }
 
         wait(for: [expectation], timeout: 1.0)
+    }
+
+    private func save(_ feed: [FeedImage], with sutToPerformSave: LocalFeedLoader, file: StaticString = #filePath, line: UInt = #line) {
+        let saveExpectation = expectation(description: "Wait for save to complete")
+        sutToPerformSave.save(feed) { saveError in
+            XCTAssertNil(saveError, "Expected save to not fail", file: file, line: line)
+            saveExpectation.fulfill()
+        }
+        wait(for: [saveExpectation], timeout: 1.0)
     }
 
     private func testSpecificStoreURL() -> URL {
