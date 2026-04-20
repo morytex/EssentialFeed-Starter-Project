@@ -18,8 +18,11 @@ public struct CachedFeed {
 }
 
 public protocol FeedStore {
-    typealias DeleteCompletion = (Error?) -> Void
-    typealias InsertCompletion = (Error?) -> Void
+    typealias DeleteResult = Error?
+    typealias DeleteCompletion = (DeleteResult) -> Void
+
+    typealias InsertResult = Error?
+    typealias InsertCompletion = (InsertResult) -> Void
 
     typealias RetrieveResult = Result<CachedFeed?, Error>
     typealias RetrieveCompletion = (RetrieveResult) -> Void
