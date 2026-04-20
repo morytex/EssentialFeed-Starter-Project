@@ -67,7 +67,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
     func test_load_when200HTTPResponse_withEmptyList_shouldDeliversEmptyList() {
         let (sut, client) = makeSUT()
 
-        expect(sut, toCompleteWith: LoadFeedResult.success([])) {
+        expect(sut, toCompleteWith: .success([])) {
             let json = makeItemsJSON([])
             client.complete(withStatus: 200, data: json)
         }
