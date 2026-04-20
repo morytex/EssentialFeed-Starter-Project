@@ -77,7 +77,7 @@ final class CacheFeedUseCaseTests: XCTestCase {
         var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
 
         var receivedResults = [LocalFeedLoader.SaveResult]()
-        sut?.save([uniqueImage()]) { result in
+        sut?.save(uniqueImageFeed().models) { result in
             receivedResults.append(result)
         }
 
@@ -92,7 +92,7 @@ final class CacheFeedUseCaseTests: XCTestCase {
         var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
 
         var receivedResults = [LocalFeedLoader.SaveResult]()
-        sut?.save([uniqueImage()]) { result in
+        sut?.save(uniqueImageFeed().models) { result in
             receivedResults.append(result)
         }
 
