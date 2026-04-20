@@ -68,7 +68,7 @@
                                                     <rect key="frame" x="0.0" y="82.333333333333314" width="361" height="361"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jTr-CA-tfl">
-                                                            <rect key="frame" x="8" y="0.0" width="345" height="361"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="361" height="361"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="361" id="Eqx-p4-c04"/>
                                                             </constraints>
@@ -78,9 +78,9 @@
                                                     <constraints>
                                                         <constraint firstItem="jTr-CA-tfl" firstAttribute="top" secondItem="6Gp-OO-7dn" secondAttribute="top" id="cjU-Ku-j3e"/>
                                                         <constraint firstAttribute="width" secondItem="6Gp-OO-7dn" secondAttribute="height" multiplier="1:1" id="eJk-U2-HBO"/>
-                                                        <constraint firstItem="jTr-CA-tfl" firstAttribute="leading" secondItem="6Gp-OO-7dn" secondAttribute="leading" constant="8" id="gwu-0Q-6XZ"/>
+                                                        <constraint firstItem="jTr-CA-tfl" firstAttribute="leading" secondItem="6Gp-OO-7dn" secondAttribute="leading" id="gwu-0Q-6XZ"/>
                                                         <constraint firstAttribute="bottom" secondItem="jTr-CA-tfl" secondAttribute="bottom" id="hgz-ig-MV3"/>
-                                                        <constraint firstAttribute="trailing" secondItem="jTr-CA-tfl" secondAttribute="trailing" constant="8" id="r4X-Id-kDr"/>
+                                                        <constraint firstAttribute="trailing" secondItem="jTr-CA-tfl" secondAttribute="trailing" id="r4X-Id-kDr"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
