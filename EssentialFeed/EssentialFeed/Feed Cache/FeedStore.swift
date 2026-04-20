@@ -7,16 +7,21 @@
 
 import Foundation
 
-public enum CachedFeed {
-    case found(feed: [LocalFeedImage], timestamp: Date)
-    case empty
+public struct CachedFeed {
+    public let feed: [LocalFeedImage]
+    public let timestamp: Date
+
+    public init(feed: [LocalFeedImage], timestamp: Date) {
+        self.feed = feed
+        self.timestamp = timestamp
+    }
 }
 
 public protocol FeedStore {
     typealias DeleteCompletion = (Error?) -> Void
     typealias InsertCompletion = (Error?) -> Void
 
-    typealias RetrieveResult = Result<CachedFeed, Error>
+    typealias RetrieveResult = Result<CachedFeed?, Error>
     typealias RetrieveCompletion = (RetrieveResult) -> Void
 
     /// Deletes the cached feed from the store.

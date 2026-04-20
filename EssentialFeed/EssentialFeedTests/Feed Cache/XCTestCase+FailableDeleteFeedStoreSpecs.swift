@@ -18,6 +18,6 @@ extension FailableDeleteFeedStoreSpecs where Self: XCTestCase {
     func assertThatDeleteHasNoSideEffectOnDeletionError(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
         deleteCache(from: sut)
 
-        expect(sut, toRetrieve: FeedStore.RetrieveResult.success(.empty), file: file, line: line)
+        expect(sut, toRetrieve: FeedStore.RetrieveResult.success(.none), file: file, line: line)
     }
 }
