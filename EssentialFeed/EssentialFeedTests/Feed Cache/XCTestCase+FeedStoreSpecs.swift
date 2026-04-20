@@ -108,12 +108,12 @@ extension FeedStoreSpecs where Self: XCTestCase {
         wait(for: [expectation1, expectation2, expectation3], timeout: 1.0, enforceOrder: true)
     }
 
-    func expect(_ sut: FeedStore, toRetrieveTwice result: RetrieveCachedFeedResult, file: StaticString = #filePath, line: UInt = #line) {
+    func expect(_ sut: FeedStore, toRetrieveTwice result: FeedStore.RetrieveResult, file: StaticString = #filePath, line: UInt = #line) {
         expect(sut, toRetrieve: result, file: file, line: line)
         expect(sut, toRetrieve: result, file: file, line: line)
     }
 
-    func expect(_ sut: FeedStore, toRetrieve result: RetrieveCachedFeedResult, file: StaticString = #filePath, line: UInt = #line) {
+    func expect(_ sut: FeedStore, toRetrieve result: FeedStore.RetrieveResult, file: StaticString = #filePath, line: UInt = #line) {
         let expectation = expectation(description: "Wait for retrieval completion")
         sut.retrieveCachedFeed { receivedResult in
             switch (receivedResult, result) {
