@@ -192,6 +192,6 @@ final class HTTPClientSpy: HTTPClient {
             httpVersion: nil,
             headerFields: nil
         )
-        completion(.success(data, response!))
+        completion(.success((data, response!)))
     }
 }

@@ -24,7 +24,7 @@ public final class URLSessionHTTPClient: HTTPClient {
             }
 
             if let data, let response = response as? HTTPURLResponse {
-                completion(.success(data, response))
+                completion(.success((data, response)))
                 return
             }
 
