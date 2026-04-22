@@ -1,0 +1,27 @@
+{
+  "configurations" : [
+    {
+      "id" : "37E633D3-413B-4F55-8666-2541D2E04D67",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "performanceAntipatternCheckerEnabled" : true,
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:EssentialFeed.xcodeproj",
+        "identifier" : "B46286162F86889D00E60C50",
+        "name" : "EssentialFeedAPIE2ETests"
+      }
+    }
+  ],
+  "version" : 1
+}

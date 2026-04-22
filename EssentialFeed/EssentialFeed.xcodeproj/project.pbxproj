@@ -42,6 +42,7 @@
 		B46286172F86889D00E60C50 /* EssentialFeedAPIE2ETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeedAPIE2ETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4B6154B2F9264A70066F7B6 /* EssentialFeedCacheIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeedCacheIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4B615552F9264B90066F7B6 /* EssentialFeedCacheIntegrationTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = EssentialFeedCacheIntegrationTests.xctestplan; sourceTree = "<group>"; };
+		B4E0784D2F98FD3100BCF5B4 /* EssentialFeedAPIE2ETests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = file; path = EssentialFeedAPIE2ETests.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -123,6 +124,7 @@
 		080EDEE721B6DA7E00813479 = {
 			isa = PBXGroup;
 			children = (
+				B4E0784D2F98FD3100BCF5B4 /* EssentialFeedAPIE2ETests.xctestplan */,
 				B4B615552F9264B90066F7B6 /* EssentialFeedCacheIntegrationTests.xctestplan */,
 				B48DBA152F8D7DEF009EB894 /* EssentialFeed */,
 				B48DB9FD2F8D7DBF009EB894 /* EssentialFeedTests */,
@@ -633,6 +635,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.moryta.EssentialFeedAPIE2ETests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -656,6 +659,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.moryta.EssentialFeedAPIE2ETests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
